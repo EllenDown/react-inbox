@@ -134,9 +134,9 @@ toggleSelect(message) {
     }
 
 
-  addLabel(messages, message, label) {
+  addLabel(label) {
     let messageNeedsLabel = []
-    this.state.messages.forEach(message => {
+    this.state.messages.map(message => {
       if (message.selected && !message.labels.includes(label)) {
       return messageNeedsLabel.push(message.id)
       return message
@@ -145,9 +145,9 @@ toggleSelect(message) {
 
     const body = {
         "messageIds" :  messageNeedsLabel ,
-        "command": "labels",
-        "labels": message.labels
-    }
+        "command": "addLabel",
+        "labels": label
+        }
     const settings = {
         method: 'PATCH',
         headers: {
@@ -158,36 +158,82 @@ toggleSelect(message) {
       fetch(`${baseURL}/messages`, settings)
        .then(response => {
          if (response.ok) {
-    this.setState(prevState => {
-      return prevState.messages.map(message => {
-        return message.selected && !message.labels.includes(label) && label !== 'Apply label' ?
-          message.labels.push(label) :
-            message
-      })
-    })
-  }
-})
-}
+           this.setState(prevState => {
+            return prevState.messages.map(message => {
+              return message.selected && !message.labels.includes(label) && label !== 'Apply label' ?
+                message.labels.push(label) :
+                  message
+                })
+              })
+            }
+          })
+        }
 
   removeLabel(label) {
-    this.setState(prevState => {
-      return prevState.messages.map(message =>  {
-         return message.selected && message.labels.includes(label) ?
-         message.labels.splice(message.labels.indexOf(label), 1) :
-          message
-      })
+    let loseMessageLabel = []
+    this.state.messages.map(message => {
+      if (message.selected && !message.labels.includes(label)) {
+      return loseMessageLabel.push(message.id)
+      return message
+    }
     })
-  }
+
+    const body = {
+        "messageIds" :  loseMessageLabel ,
+        "command": "removeLabel",
+        "labels": label
+        }
+    const settings = {
+        method: 'PATCH',
+        headers: {
+          'content-type' : 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+      fetch(`${baseURL}/messages`, settings)
+       .then(response => {
+         if (response.ok) {
+           this.setState(prevState => {
+              return prevState.messages.map(message =>  {
+                 return message.selected && message.labels.includes(label) ?
+                 message.labels.splice(message.labels.indexOf(label), 1) :
+                  message
+                })
+              })
+            }
+          })
+        }
 
   deleteMessage(messages) {
-    this.setState(prevState => {
-      prevState.messages.forEach((message, i) => {
-        return message.selected ?
-        messages.splice(i, 1) :
-        message
-      })
+    let deleteId = []
+    this.state.messages.forEach(message => {
+      if (message.selected) {
+      return deleteId.push(message.id)
+    }
     })
-  }
+
+    const body = {
+        "messageIds" :  deleteId ,
+        "command": "deleteMessage",
+        }
+    const settings = {
+        method: 'PATCH',
+        headers: {
+          'content-type' : 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+      fetch(`${baseURL}/messages`, settings)
+
+           this.setState(prevState => {
+             prevState.messages.forEach((message, i) => {
+                return message.selected ?
+                messages.splice(i, 1) :
+                message
+            })
+          })
+        }
+
 
   render() {
     return (
