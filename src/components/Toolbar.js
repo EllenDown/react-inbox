@@ -7,6 +7,7 @@ const Toolbar =
   markAsRead,
   markAsUnread,
   addLabel,
+  removeLabel,
   deleteMessage
 }) => {
   const unReadMessages = messages.filter(message => message.read === false).length
@@ -35,7 +36,7 @@ if (messagesSelected === messages.length) {
       <i className="fa fa-plus"></i>
     </a>
 
-    <button className="btn btn-default" onCLick ={ () => clickSelectDeselectAll(messagesSelected) }>
+    <button className="btn btn-default" onClick ={ () => clickSelectDeselectAll(messagesSelected) }>
       <i className={`fa ${ buttonSelect }`}></i>
     </button>
 
@@ -53,7 +54,9 @@ if (messagesSelected === messages.length) {
       <option value="gschool">gschool</option>
     </select>
 
-    <select className="form-control label-select">
+    <select className="form-control label-select"
+      // disabled = { disableButtons () }
+      onChange = { (e) => removeLabel(e.target.value) }>
       <option>Remove label</option>
       <option value="dev">dev</option>
       <option value="personal">personal</option>
@@ -61,7 +64,7 @@ if (messagesSelected === messages.length) {
     </select>
 
     <button className="btn btn-default"
-      disabled = { disableButtons() }
+      // disabled = { disableButtons() }
       onClick = { () => deleteMessage(messages) }>
       <i className="fa fa-trash-o"></i>
     </button>
@@ -69,6 +72,5 @@ if (messagesSelected === messages.length) {
 </div>
   )
 }
-
 
 export default Toolbar;

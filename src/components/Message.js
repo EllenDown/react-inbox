@@ -15,11 +15,11 @@ const Message = ({
 
 
 return (
-  <div className={`row message ${readClass} ${selectClass}`} onClick = { () => toggleSelect(message)}>
+  <div className={`row message ${readClass} ${selectClass}`} >
   <div className="col-xs-1">
     <div className="row">
       <div className="col-xs-2">
-        <input type="checkbox" checked = {message.selected}/>
+        <input type="checkbox" checked = {message.selected} onChange = { () => toggleSelect(message)}/>
       </div>
       <div onClick = { () => toggleStar(message) } className="col-xs-2">
         <i className={`star fa ${starClass}`}></i>
