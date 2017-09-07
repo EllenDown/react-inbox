@@ -13,7 +13,6 @@ const Message = ({
     <span key={i} className="label label-warning">{label}</span>
   ))
 
-
 return (
   <div className={`row message ${readClass} ${selectClass}`} >
   <div className="col-xs-1">

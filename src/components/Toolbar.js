@@ -3,26 +3,26 @@ import React from 'react';
 const Toolbar =
 ({
   messages,
+  toggleComposeForm,
   clickSelectDeselectAll,
   markAsRead,
   markAsUnread,
   addLabel,
   removeLabel,
-  deleteMessage
+  deleteMessage,
 }) => {
   const unReadMessages = messages.filter(message => message.read === false).length
   const messagesSelected = messages.filter(message => message.selected === false).length
   const disableButtons = () => { return messagesSelected === 0 ? true : false }
 
 let buttonSelect
-if (messagesSelected === messages.length) {
-  buttonSelect = 'face-check-square-o'
- } else if (messagesSelected  === 0 ) {
-   buttonSelect = 'fa-square-o'
- } else {
-   buttonSelect = 'fa-minus-square-o'
- }
-
+  if (messagesSelected === messages.length) {
+    buttonSelect = 'face-check-square-o'
+   } else if (messagesSelected  === 0 ) {
+     buttonSelect = 'fa-square-o'
+   } else {
+     buttonSelect = 'fa-minus-square-o'
+   }
   return (
 
     <div className="row toolbar">
@@ -32,7 +32,7 @@ if (messagesSelected === messages.length) {
       unread messages
     </p>
 
-    <a className="btn btn-danger">
+    <a className="btn btn-danger" onClick = { toggleComposeForm }>
       <i className="fa fa-plus"></i>
     </a>
 
@@ -45,7 +45,7 @@ if (messagesSelected === messages.length) {
     <button className="btn btn-default" onClick = { markAsUnread }>Mark As Unread</button>
 
     <select className="form-control label-select"
-      // disabled = { disableButtons () }
+      disabled = { disableButtons () }
       onChange = { (e) => addLabel(e.target.value) }>
 
       <option>Apply label</option>
@@ -55,7 +55,7 @@ if (messagesSelected === messages.length) {
     </select>
 
     <select className="form-control label-select"
-      // disabled = { disableButtons () }
+      disabled = { disableButtons () }
       onChange = { (e) => removeLabel(e.target.value) }>
       <option>Remove label</option>
       <option value="dev">dev</option>
